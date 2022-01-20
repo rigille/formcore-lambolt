@@ -5,10 +5,237 @@
 
 // type RBTree<A: Type> {
 //   nil
-//   tie(color: Color, key: U32, val: A, left: RBTree, right: RBTree)
+//   tie(color: Color, left: RBTree<A>, key: U32, val: A, right: RBTree<A>)
 // }
 
-// <A: Type> -> (key: U32, map: RBTree) -> Maybe<A>
-(RBTree.get (RBTree.nil)) = (None)
-(RBTree.get (RBTree.tie color, key, val, left, right)) = (None)
-(Main) = 0
+// IfElse
+(IfElse 1 a b) = a
+(IfElse 0 a b) = b
+
+(RedBlack (Color.r) a b) = a
+(RedBlack (Color.b) a b) = b
+
+// <A: Type> -> (key: U32, map: RBTree<A>) -> Maybe<A>
+(RBTree.get mykey (RBTree.nil)) = (None)
+(RBTree.get mykey (RBTree.tie color left key val right)) =
+  (IfElse
+    (< mykey key)
+    (RBTree.get mykey left)
+    (IfElse
+      (> mykey key)
+      (RBTree.get mykey right)
+      (Some val)
+    )
+  )
+
+// <A: Type> -> (key: U32, val: A, map: RBTree<A>) -> RBTree<A>
+(RBTree.set) = (TODO)
+
+// <A: Type> -> (color: Color, key: U32, val: A, left: RBTree<A>, right: RBTree<A>) -> RBTree<A>
+(RBTree.balance (Color.r)
+  l
+  k v
+  r
+) =
+  (RBTree.tie (Color.r)
+    l
+    k v
+    r
+  )
+
+(RBTree.balance (Color.b)
+  (RBTree.tie lc
+    ll
+    lk lv
+    rr
+  )
+  k v
+  r
+) =
+  (RBTree.balance.l
+    lc
+    ll
+    lk lv
+    rr
+    k v
+    r
+  )
+
+(RBTree.balance.l (Color.b)
+  ll
+  lk lv
+  rr
+  k v
+  r
+) = 
+  (RBTree.tie (Color.b)
+    (RBTree.tie (Color.b)
+      ll
+      lk lv
+      rr
+    )
+    k v
+    r
+  )
+
+(RBTree.balance.l (Color.r)
+  (RBTree.tie llc
+    lll
+    llk llv
+    llr
+  )
+  lk lv
+  rr
+  k v
+  r
+) =
+  (RBTree.balance.ll llc
+    lll
+    llk llv
+    llr
+    lk lv
+    rr
+    k v
+    r
+  )
+
+(RBTree.balance.ll (Color.b)
+  lll
+  llk llv
+  llr
+  lk lv
+  rr
+  k v
+  r
+) =
+  (RBTree.tie (Color.b)
+    (RBTree.tie (Color.r)
+      (RBTree.tie (Color.b)
+        lll
+        llk llv
+        llr
+      )
+      lk lv
+      rr
+    )
+    k v
+    r
+  )
+
+(RBTree.balance.ll (Color.r)
+  lll
+  llk llv
+  llr
+  lk lv
+  rr
+  k v
+  r
+) =
+  (RBTree.tie (Color.r)
+    (RBTree.tie (Color.b)
+      lll
+      llk llv
+      llr
+    )
+    lk lv
+    (RBTree.tie (Color.b)
+      rr
+      k v
+      r
+    )
+  )
+
+//(RBTree.balance (Color.b)
+//  (RBTree.tie (Color.r)
+//    child0
+//    key0 val0
+//    (RBTree.tie (Color.r) child1 key1 val1 child2)
+//  )
+//  key2 val2
+//  child3
+//) =
+//  (RBTree.tie
+//    (Color.r)
+//    (RBTree.tie (Color.b)
+//      child0
+//      key0 val0
+//      child1
+//    )
+//    key1 val1
+//    (RBTree.tie (Color.b)
+//      child2
+//      key2 val2
+//      child3
+//    )
+//  )
+//
+//(RBTree.balance (Color.b)
+//  child0
+//  key0 val0
+//  (RBTree.tie (Color.r)
+//    (RBTree.tie (Color.r) child1 key1 val1 child2)
+//    key2 val2
+//    child3
+//  )
+//) =
+//  (RBTree.tie
+//    (Color.r)
+//    (RBTree.tie (Color.b)
+//      child0
+//      key0 val0
+//      child1
+//    )
+//    key1 val1
+//    (RBTree.tie (Color.b)
+//      child2
+//      key2 val2
+//      child3
+//    )
+//  )
+//
+//(RBTree.balance (Color.b)
+//  child0
+//  key0 val0
+//  (RBTree.tie (Color.r)
+//    child1
+//    key1 val1
+//    (RBTree.tie (Color.r) child2 key2 val2 child3)
+//  )
+//) =
+//  (RBTree.tie
+//    (Color.r)
+//    (RBTree.tie (Color.b)
+//      child0
+//      key0 val0
+//      child1
+//    )
+//    key1 val1
+//    (RBTree.tie (Color.b)
+//      child2
+//      key2 val2
+//      child3
+//    )
+//  )
+//
+//(TestRB) =
+//  (RBTree.tie
+//    (Color.b)
+//    3
+//    6
+//    (RBTree.tie
+//      (Color.r)
+//      1
+//      2
+//      (RBTree.nil)
+//      (RBTree.nil)
+//    )
+//    (RBTree.tie
+//      (Color.r)
+//      5
+//      10
+//      (RBTree.nil)
+//      (RBTree.nil)
+//    )
+//  )
+//
+(Main) = (RBTree.get 5 (TestRB))
