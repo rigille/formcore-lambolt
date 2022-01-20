@@ -1,0 +1,14 @@
+// type Color {
+//   r
+//   b 
+// }
+
+// type RBTree<A: Type> {
+//   nil
+//   tie(color: Color, key: U32, val: A, left: RBTree, right: RBTree)
+// }
+
+// <A: Type> -> (key: U32, map: RBTree) -> Maybe<A>
+(RBTree.get (RBTree.nil)) = (None)
+(RBTree.get (RBTree.tie color, key, val, left, right)) = (None)
+(Main) = 0

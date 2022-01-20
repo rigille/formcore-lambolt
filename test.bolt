@@ -1,0 +1,10 @@
+(Int (Succ a) (Succ b)) = (Int a b)
+
+(NatSum (Zero) n) = n
+(NatSum (Succ n) m) = (Succ (NatSum n m))
+
+(IntSum (Int a b) (Int c d)) = (Int (NatSum a c) (NatSum b d))
+
+(MyInt) = (Int (Succ (Succ (Succ (Zero)))) (Succ (Zero)))
+
+(Main) = (IntSum (MyInt) (MyInt))

@@ -1,0 +1,17 @@
+// Names
+(Bool) = 0
+(Self.Bool) = 1
+(P) = 2
+(Noname) = 4294967295
+
+(Bool.Def) =
+  (Def (Bool) (Bool.Term) (Typ))
+
+(Bool.Term) =
+  (All
+    (true)
+    (Bool.Self)
+    (P)
+    (All (false) (Noname) (Noname) (Ref (Bool)) λx λy (Typ))
+  )
+

@@ -1,0 +1,59 @@
+(Z) = 0
+(Typ) = 1
+(Bool) = 7
+(Equal) = 16
+(Double_negation_theorem) = 18
+(False) = 19
+(Main) = 20
+(Not) = 22
+(Refl) = 25
+(True) = 26
+(BoolDef) =
+(Def (Bool) (Typ) 
+let self = 6
+let p = 5
+(All (True) self p 
+let self = 2
+(All (False) (Z) self (Ref (Bool)) λ λself (Typ)) λself λp 
+let true = 4
+(All (False) (Z) true (App p (Ref (True))) λ λtrue 
+let false = 3
+(All (False) (Z) false (App p (Ref (False))) λ λfalse (App p self)))))
+(EqualDef) =
+(Def (Equal) 
+let a = 10
+(All (False) (Z) a (Typ) λ λa 
+let a = 9
+(All (False) (Z) a a λ λa 
+let b = 8
+(All (False) (Z) b a λ λb (Typ)))) λa λa λb 
+let self = 15
+let p = 14
+(All (True) self p 
+let b = 12
+(All (False) (Z) b a λ λb 
+let self = 11
+(All (False) (Z) self (App (App (App (Ref (Equal)) a) a) b) λ λself (Typ))) λself λp 
+let refl = 13
+(All (False) (Z) refl (App (App p a) (App (App (Ref (Refl)) a) a)) λ λrefl (App (App p b) self))))
+(Double_negation_theoremDef) =
+(Def (Double_negation_theorem) 
+let b = 17
+(All (False) (Z) b (Ref (Bool)) λ λb (App (App (App (Ref (Equal)) (Ref (Bool))) (App (Ref (Not)) (App (Ref (Not)) b))) b)) λb (App (App (App b λself (App (App (App (Ref (Equal)) (Ref (Bool))) (App (Ref (Not)) (App (Ref (Not)) self))) self)) (App (App (Ref (Refl)) (Ref (Bool))) (Ref (True)))) (App (App (Ref (Refl)) (Ref (Bool))) (Ref (False)))))
+(FalseDef) =
+(Def (False) (Ref (Bool)) λp λt λf f)
+(MainDef) =
+(Def (Main) (Ref (Bool)) (Ref (False)))
+(NotDef) =
+(Def (Not) 
+let x = 21
+(All (False) (Z) x (Ref (Bool)) λ λx (Ref (Bool))) λx (App (App (App x λself (Ref (Bool))) (Ref (False))) (Ref (True))))
+(ReflDef) =
+(Def (Refl) 
+let a = 24
+(All (True) (Z) a (Typ) λ λa 
+let a = 23
+(All (True) (Z) a a λ λa (App (App (App (Ref (Equal)) a) a) a))) λa λx λp λrefl refl)
+(TrueDef) =
+(Def (True) (Ref (Bool)) λp λt λf t)
+(Main) = (Double_negation_theoremDef)
